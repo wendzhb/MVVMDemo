@@ -1,0 +1,53 @@
+apply plugin: 'com.android.application'
+
+apply plugin: 'kotlin-android'
+
+apply plugin: 'kotlin-android-extensions'
+
+apply from: "${rootProject.rootDir}/config.gradle"
+
+android {
+    compileSdkVersion project.ext.compileSdkVersion
+    defaultConfig {
+        minSdkVersion project.ext.minSdkVersion
+        targetSdkVersion project.ext.targetSdkVersion
+
+        applicationId project.ext.module_appApplicationId
+        versionCode project.ext.module_appVersionCode
+        versionName project.ext.module_appVersionName
+
+        multiDexEnabled true
+
+        manifestPlaceholders = [
+                app_name: project.ext.module_appName
+        ]
+
+        testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
+        }
+    }
+
+    dataBinding {
+        enabled = true
+    }
+}
+
+dependencies {
+    implementation fileTree(dir: 'libs', include: ['*.jar'])
+    implementation project.ext.kotlinDeps
+    implementation project.ext.supportDeps
+    implementation project.ext.networkDeps
+    implementation project.ext.rxDeps
+    annotationProcessor  project.ext.databindingDeps
+    implementation project.ext.roomDeps
+    kapt project.ext.roomDep
+
+    testImplementation 'junit:junit:4.12'
+    androidTestImplementation 'com.android.support.test:runner:1.0.2'
+    androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
+}
